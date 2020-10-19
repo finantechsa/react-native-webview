@@ -28,7 +28,7 @@ import {
   NativeWebViewIOS,
   ViewManager,
   State,
-  RNCWebViewUIManagerIOS,
+  CustomUIManager,
 } from './WebViewTypes';
 
 import styles from './WebView.styles';
@@ -129,7 +129,7 @@ class WebView extends React.Component<IOSWebViewProps, State> {
     UIManager.dispatchViewManagerCommand(
       this.getWebViewHandle(),
       this.getCommands().requestFocus,
-      undefined,
+      null,
     );
   };
 
@@ -256,13 +256,6 @@ class WebView extends React.Component<IOSWebViewProps, State> {
     viewManager.startLoadWithResult(!!shouldStart, lockIdentifier);
   };
 
-  onContentProcessDidTerminate = (event: WebViewTerminatedEvent) => {
-    const { onContentProcessDidTerminate } = this.props;
-    if (onContentProcessDidTerminate) {
-      onContentProcessDidTerminate(event);
-    }
-  };
-
   componentDidUpdate(prevProps: IOSWebViewProps) {
     this.showRedboxOnPropChanges(prevProps, 'allowsInlineMediaPlayback');
     this.showRedboxOnPropChanges(prevProps, 'incognito');
@@ -290,10 +283,7 @@ class WebView extends React.Component<IOSWebViewProps, State> {
       originWhitelist,
       renderError,
       renderLoading,
-      injectedJavaScriptForMainFrameOnly = true,
-      injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true,
       style,
-      containerStyle,
       ...otherProps
     } = this.props;
 

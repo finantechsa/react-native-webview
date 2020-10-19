@@ -2,8 +2,8 @@ import escapeStringRegexp from 'escape-string-regexp';
 import React from 'react';
 import { Linking, View, ActivityIndicator, Text } from 'react-native';
 import {
+  WebViewNavigationEvent,
   OnShouldStartLoadWithRequest,
-  ShouldStartLoadRequestEvent,
 } from './WebViewTypes';
 import styles from './WebView.styles';
 

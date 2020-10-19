@@ -14,15 +14,19 @@ import {
 
 type WebViewCommands = 'goForward' | 'goBack' | 'reload' | 'stopLoading' | 'postMessage' | 'injectJavaScript' | 'loadUrl' | 'requestFocus';
 
-type AndroidWebViewCommands = 'clearHistory' | 'clearCache' | 'clearFormData';
-
-
-
-interface RNCWebViewUIManager<Commands extends string> extends UIManagerStatic {
+export interface CustomUIManager extends UIManagerStatic {
   getViewManagerConfig: (
     name: string,
   ) => {
     Commands: {[key in Commands]: number};
+  };
+  dispatchViewManagerCommand: (
+    viewHandle: number,
+    command: Function,
+    params: object | null,
+  ) => void;
+  RNCWebView: {
+    Commands: WebViewCommands;
   };
 }
 
@@ -161,12 +165,6 @@ export type WebViewMessageEvent = NativeSyntheticEvent<WebViewMessage>;
 
 export type WebViewErrorEvent = NativeSyntheticEvent<WebViewError>;
 
-export type WebViewTerminatedEvent = NativeSyntheticEvent<WebViewNativeEvent>;
-
-export type WebViewHttpErrorEvent = NativeSyntheticEvent<WebViewHttpError>;
-
-export type WebViewRenderProcessGoneEvent = NativeSyntheticEvent<WebViewRenderProcessGoneDetail>;
-
 export type DataDetectorTypes =
   | 'phoneNumber'
   | 'link'
@@ -266,7 +264,7 @@ export interface CommonNativeWebViewProps extends ViewProps {
   onLoadingStart: (event: WebViewNavigationEvent) => void;
   onHttpError: (event: WebViewHttpErrorEvent) => void;
   onMessage: (event: WebViewMessageEvent) => void;
-  onShouldStartLoadWithRequest: (event: ShouldStartLoadRequestEvent) => void;
+  onShouldStartLoadWithRequest: (event: WebViewNavigationEvent) => void;
   showsHorizontalScrollIndicator?: boolean;
   showsVerticalScrollIndicator?: boolean;
   // TODO: find a better way to type this.
@@ -283,7 +281,6 @@ export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
   cacheMode?: CacheMode;
   allowFileAccess?: boolean;
   scalesPageToFit?: boolean;
-  allowFileAccessFromFileURLs?: boolean;
   allowUniversalAccessFromFileURLs?: boolean;
   androidHardwareAccelerationDisabled?: boolean;
   androidLayerType?: AndroidLayerType;
@@ -314,9 +311,12 @@ export interface IOSNativeWebViewProps extends CommonNativeWebViewProps {
   autoManageStatusBarEnabled?: boolean;
   bounces?: boolean;
   contentInset?: ContentInsetProp;
-  contentInsetAdjustmentBehavior?: ContentInsetAdjustmentBehavior;
-  contentMode?: ContentMode;
-  readonly dataDetectorTypes?: DataDetectorTypes | DataDetectorTypes[];
+  contentInsetAdjustmentBehavior?:
+    | 'automatic'
+    | 'scrollableAxes'
+    | 'never'
+    | 'always';
+  dataDetectorTypes?: DataDetectorTypes | ReadonlyArray<DataDetectorTypes>;
   decelerationRate?: number;
   directionalLockEnabled?: boolean;
   hideKeyboardAccessoryView?: boolean;
@@ -404,7 +404,11 @@ export interface IOSWebViewProps extends WebViewSharedProps {
    * content area of the scroll view. The default value of this property is
    * "never". Available on iOS 11 and later.
    */
-  contentInsetAdjustmentBehavior?: ContentInsetAdjustmentBehavior;
+  contentInsetAdjustmentBehavior?:
+    | 'automatic'
+    | 'scrollableAxes'
+    | 'never'
+    | 'always';
 
   /**
    * The amount by which the web view content is inset from the edges of

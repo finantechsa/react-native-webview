@@ -424,7 +424,8 @@ url
 Function that is invoked when the `WebView` receives an http error.
 
 > **_Note_**
-> Android API minimum level 23.
+>
+> On android, You can't get the url property, meaning that `event.nativeEvent.url` will be null.
 
 | Type     | Required |
 | -------- | -------- |
@@ -837,9 +838,9 @@ Boolean value to enable third party cookies in the `WebView`. Used on Android Lo
 
 Sets the user-agent for the `WebView`.
 
-| Type   | Required | Platform            |
-| ------ | -------- | ------------------- |
-| string | No       | iOS, Android, macOS |
+| Type   | Required |
+| ------ | -------- |
+| string | No       |
 
 ---
 
@@ -847,13 +848,13 @@ Sets the user-agent for the `WebView`.
 
 Append to the existing user-agent. Setting `userAgent` will override this.
 
-| Type   | Required | Platform            |
-| ------ | -------- | ------------------- |
-| string | No       | iOS, Android, macOS |
+| Type   | Required |
+| ------ | -------- |
+| string | No       |
 
 ```jsx
 <WebView
-  source={{ uri: 'https://reactnative.dev' }}
+  source={{ uri: 'https://facebook.github.io/react-native' }}
   applicationNameForUserAgent={'DemoApp/1.1.0'}
 />
 // Resulting User-Agent will look like:
@@ -1055,13 +1056,13 @@ Boolean that sets whether JavaScript running in the context of a file scheme URL
 
 A String value that indicates which URLs the WebView's file can then reference in scripts, AJAX requests, and CSS imports. This is only used in for WebViews that are loaded with a source.uri set to a `'file://'` URL. If not provided, the default is to only allow read access to the URL provided in source.uri itself.
 
-| Type   | Required | Platform      |
-| ------ | -------- | ------------- |
-| string | No       | iOS and macOS |
+| Type   | Required | Platform |
+| ------ | -------- | -------- |
+| string | No       | iOS      |
 
 ---
 
-### `url`[⬆](#props-index)<!-- Link generated with jump2header -->
+### `url`
 
 **Deprecated.** Use the `source` prop instead.
 
@@ -1115,9 +1116,9 @@ If true, this will be able horizontal swipe gestures. The default value is `fals
 
 Does not store any data within the lifetime of the WebView.
 
-| Type    | Required | Platform            |
-| ------- | -------- | ------------------- |
-| boolean | No       | iOS, Android, macOS |
+| Type    | Required |
+| ------- | -------- |
+| boolean | No       |
 
 ---
 
@@ -1190,7 +1191,7 @@ A Boolean value that determines whether pressing on a link displays a preview of
 
 ### `sharedCookiesEnabled`[⬆](#props-index)<!-- Link generated with jump2header -->
 
-Set `true` if shared cookies from `[NSHTTPCookieStorage sharedHTTPCookieStorage]` should used for every load request in the WebView. The default value is `false`. For more on cookies, read the [Guide](Guide.md#Managing-Cookies)
+Set `true` if shared cookies from `[NSHTTPCookieStorage sharedHTTPCookieStorage]` should used for every load request in the WebView. The default value is `false`.
 
 | Type    | Required | Platform      |
 | ------- | -------- | ------------- |

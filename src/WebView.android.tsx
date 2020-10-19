@@ -81,7 +81,7 @@ class WebView extends React.Component<AndroidWebViewProps, State> {
 
   webViewRef = React.createRef<NativeWebViewAndroid>();
 
-  messagingModuleName = `WebViewMessageHandler${uniqueRef+=1}`;
+  getCommands = () => UIManager.getViewManagerConfig('RNCWebView').Commands;
 
   componentDidMount = () => {
     BatchedBridge.registerCallableModule(this.messagingModuleName, this);
@@ -128,7 +128,7 @@ class WebView extends React.Component<AndroidWebViewProps, State> {
     UIManager.dispatchViewManagerCommand(
       this.getWebViewHandle(),
       this.getCommands().requestFocus,
-      undefined
+      null,
     );
   };
 
